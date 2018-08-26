@@ -2,6 +2,7 @@
 #include <iostream>
 using namespace std;
 
+//Question: https://www.geeksforgeeks.org/search-an-element-in-a-sorted-and-pivoted-array/
 int a[] = {5,6,1,2,3,4};
 
 int binary_search(int start, int end, int num)

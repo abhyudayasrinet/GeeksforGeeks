@@ -2,29 +2,9 @@
 #include <iostream>
 using namespace std;
 
-int a[] = {5,6,1,2,3,4};
+//question: https://www.geeksforgeeks.org/given-a-sorted-and-rotated-array-find-if-there-is-a-pair-with-a-given-sum/
 
-int binary_search(int start, int end, int num)
-{
-    int mid;
-    while(start<=end)
-    {
-        mid = (start + end) / 2;
-        if(a[mid] == num)
-        {
-            return mid;
-        }
-        if(a[mid] > num)
-        {
-            end = mid-1;
-        }
-        else
-        {
-            start = mid+1;
-        }
-    }
-    return -1;
-}
+int a[] = {5,6,1,2,3,4};
 
 int main()
 {
