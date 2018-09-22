@@ -1,6 +1,6 @@
-//https://practice.geeksforgeeks.org/problems/height-of-binary-tree/1
+//https://practice.geeksforgeeks.org/problems/diameter-of-binary-tree/1
 
-
+{
 #include <bits/stdc++.h>
 using namespace std;
 /* A binary tree node has data, pointer to left child
@@ -21,16 +21,8 @@ struct Node* newNode(int data)
   node->right = NULL;
   return(node);
 }
-/* Computes the number of nodes in a tree. */
-int height(struct Node* node);
-void inorder(Node *root)
-{
-    if (root == NULL)
-       return;
-    inorder(root->left);
-    cout << root->data << " ";
-    inorder(root->right);    
-}
+/* Function to get diameter of a binary tree */
+int diameter(struct Node * tree);
 /* Driver program to test size function*/
 int main()
 {
@@ -65,9 +57,11 @@ int main()
           parent->right = child;
         m[n2]  = child;
      }
-     cout << height(root) << endl;
+     cout << diameter(root) << endl;
   }
   return 0;
+}
+
 }
 
 /*Please note that it's Function problem i.e.
@@ -80,17 +74,40 @@ Driver Code to call/invoke your function is mentioned above.*/
      int data;
      Node* left, *right;
 }; */
-/* Computes the height of binary tree with given root.  */
+/* Computes the diameter of binary tree with given root.  */
+
 int max(int a, int b)
 {
-    if(a>b)
+    if(a > b)
         return a;
     return b;
 }
-int height(Node* node)
-{
-    if(node == NULL)
-        return 0;
 
-    return max(height(node->right), height(node->left)) + 1;
+int getMaxDepth(Node *root, int &max)
+{
+    if(root->left == NULL && root->right == NULL)
+        return 1;
+    
+    int left_val = -1, right_val = -1;
+    if(root->left != NULL)
+        left_val = getMaxDepth(root->left, maxval);
+    if(root->right != NULL)
+        right_val = getMaxDepth(root->right, maxval);
+
+    if(left_val == -1)
+        return right_val + 1;
+    if(right_val == -1)
+        return left_val + 1;
+
+    if(left_val != -1 && right_val != -1 && maxval < left_val + right_val + 1)
+        maxval = left_val + right_val + 1;
+    
+    return max(left_val, right_val) + 1;
+}
+
+int diameter(Node* node)
+{
+   int maxval = 0;
+   getMaxDepth(root, &maxval);
+   return maxval;
 }

@@ -1,6 +1,7 @@
-//https://practice.geeksforgeeks.org/problems/height-of-binary-tree/1
+///https://practice.geeksforgeeks.org/problems/count-leaves-in-binary-tree/1
 
-
+{
+//Initial Template for C++
 #include <bits/stdc++.h>
 using namespace std;
 /* A binary tree node has data, pointer to left child
@@ -21,16 +22,7 @@ struct Node* newNode(int data)
   node->right = NULL;
   return(node);
 }
-/* Computes the number of nodes in a tree. */
-int height(struct Node* node);
-void inorder(Node *root)
-{
-    if (root == NULL)
-       return;
-    inorder(root->left);
-    cout << root->data << " ";
-    inorder(root->right);    
-}
+int countLeaves(struct Node* root);
 /* Driver program to test size function*/
 int main()
 {
@@ -41,14 +33,14 @@ int main()
      map<int, Node*> m;
      int n;
      scanf("%d",&n);
-     struct Node *root = NULL;
-     struct Node *child;
+     Node *root = NULL;
      while (n--)
      {
         Node *parent;
         char lr;
         int n1, n2;
         scanf("%d %d %c", &n1, &n2, &lr);
+      //  cout << n1 << " " << n2 << " " << (char)lr << endl;
         if (m.find(n1) == m.end())
         {
            parent = newNode(n1);
@@ -58,39 +50,44 @@ int main()
         }
         else
            parent = m[n1];
-        child = newNode(n2);
+        Node *child = newNode(n2);
         if (lr == 'L')
           parent->left = child;
         else
           parent->right = child;
         m[n2]  = child;
      }
-     cout << height(root) << endl;
+     cout << countLeaves(root) << endl;
   }
   return 0;
+}
+
 }
 
 /*Please note that it's Function problem i.e.
 you need to write your solution in the form of Function(s) only.
 Driver Code to call/invoke your function is mentioned above.*/
 
-/* Tree node structure  used in the program
- struct Node
- {
-     int data;
-     Node* left, *right;
+//User function Template for C++
+/* A binary tree node has data, pointer to left child
+   and a pointer to right child  
+struct Node
+{
+    int data;
+    Node* left;
+    Node* right;
 }; */
-/* Computes the height of binary tree with given root.  */
-int max(int a, int b)
+/* Should return count of leaves. For example, return
+    value should be 2 for following tree.
+         10
+      /      \ 
+   20       30 */
+int countLeaves(Node* root)
 {
-    if(a>b)
-        return a;
-    return b;
-}
-int height(Node* node)
-{
-    if(node == NULL)
+    if(root == NULL)
         return 0;
-
-    return max(height(node->right), height(node->left)) + 1;
+  if(root->left == NULL && root->right == NULL)
+    return 1;
+    
+    return countLeaves(root->left)+countLeaves(root->right);
 }
