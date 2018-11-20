@@ -102,8 +102,6 @@ int main() {
 	return 0;
 }
 
-}
-
 /*Please note that it's Function problem i.e.
 you need to write your solution in the form of Function(s) only.
 Driver Code to call/invoke your function is mentioned above.*/
@@ -119,61 +117,71 @@ struct Node
 a duplicate subtree of size 2 or more else returns false*/
 
 
-//34-35 - 
 
-
-string preorder;
-string inorder;
-
-void preorder(Node *root)
+void preorder(Node *root,map <char, vector <Node*>> &m)
 {
     if(root == NULL)
-        return NULL;
-    preorder += root->data;
-    preorder(root->left);
-    preorder(root->right);
+        return;
+    if(m.find(root->data) == m.end())
+    {
+        m[root->data] = vector <Node*> ();
+        m[root->data].push_back(root);
+    }
+    else
+        m[root->data].push_back(root);
+    // cout<<root->data<<" ";
+    preorder(root->left, m);
+    preorder(root->right, m);
 }
+
 
 void inorder(Node *root)
 {
     if(root == NULL)
-        return NULL;
+        return;
     inorder(root->left);
-    inorder += root->data;
+    // cout<<root->data<<" ";
     inorder(root->right);
 }
 
-bool verify_inorder(string str)
+bool duplicate(Node* root1, Node* root2, int &depth)
 {
-    
+    if(root1 == NULL && root2 == NULL)
+        return true;
+    if(root1 == NULL && root2 != NULL)
+        return false;
+    if(root1 != NULL && root2 == NULL)
+        return false;
+    if(root1->data != root2->data)
+        return false;
+    depth++;
+    // cout<<root1->data<<" "<<root2->data<<endl;
+    return duplicate(root1->left, root2->left, depth) && duplicate(root1->right, root2->right, depth);
 }
 
 bool dupSub(Node *root)
 {
-    preorder = "";
-    inorder = "";
-    preorder(root);
-    inorder(root);
+    map <char, vector <Node*>> m;
+    preorder(root, m);
 
-    for(int i=0;i<preorder.size();i++)
+    map <char, vector <Node*>>::iterator itr = m.begin();
+    while(itr != m.end())
     {
-        for(int j=0;j<preorder.size();j++)
+        // cout<<itr->first<<" "<<itr->second.size()<<endl;
+        if(itr->second.size() > 1)
         {
-            if(i!=j)
+            for(int i=0;i<itr->second.size();i++)
             {
-                int x = i, y = j,c=0;
-                while(preorder[x] == preorder[y])
+                for(int j=i+1;j<itr->second.size();j++)
                 {
-                    x++;
-                    y++;
-                    c++;
-                }
-                if(c > 2)
-                {
-                    if(verify_inorder(preorder.substr(i, c)))
-                        return 1;
+                    int depth = 0;
+                    bool val = duplicate(itr->second[i], itr->second[j], depth);
+                    if(val && depth > 1)
+                        return true;
                 }
             }
         }
+        itr++;
     }
+    return false;
 }
